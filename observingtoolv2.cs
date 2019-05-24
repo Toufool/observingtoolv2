@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -72,7 +72,7 @@ namespace Testing
                 Console.WriteLine("Air Mass at Transit is " + Convert.ToString(Air_Mass_TransitAlt));
                 Console.WriteLine("Local Rise time is " + Full_Local_Rise_Time);
                 Console.WriteLine("Local Transit time is " + Full_Local_Transit_Time);
-                Console.WriteLine("Local Set time is "  + Full_Local_Set_Time);
+                Console.WriteLine("Local Set time is " + Full_Local_Set_Time);
                 Console.ReadLine();
             }
 
@@ -107,40 +107,13 @@ namespace Testing
         {
             double TransitAlt_Time_Hours_LST = RA / 15;
             double TransitAlt_Time_Hours_GMST = TransitAlt_Time_Hours_LST + (longitude / 15);
-
-            if (TransitAlt_Time_Hours_GMST < 0)
-            {
-                TransitAlt_Time_Hours_GMST += 24;
-            }
-
-            if (TransitAlt_Time_Hours_GMST >= 24)
-            {
-                TransitAlt_Time_Hours_GMST -= 24;
-            }
+            TransitAlt_Time_Hours_GMST = TwentyFourHourConversion(TransitAlt_Time_Hours_GMST);
 
             double TransitAlt_Time_Hours_UT = (TransitAlt_Time_Hours_GMST - 6.656306 - (0.0657098242 * (N))) / 1.0027379093;
-
-            if (TransitAlt_Time_Hours_UT < 0)
-            {
-                TransitAlt_Time_Hours_UT += 24;
-            }
-
-            if (TransitAlt_Time_Hours_UT >= 24)
-            {
-                TransitAlt_Time_Hours_UT -= 24;
-            }
+            TransitAlt_Time_Hours_UT = TwentyFourHourConversion(TransitAlt_Time_Hours_UT);
 
             double TransitAlt_Time_Hours_Local = TransitAlt_Time_Hours_UT + UT_offset;
-
-            if (TransitAlt_Time_Hours_Local < 0)
-            {
-                TransitAlt_Time_Hours_Local += 24;
-            }
-
-            if (TransitAlt_Time_Hours_Local >= 24)
-            {
-                TransitAlt_Time_Hours_Local -= 24;
-            }
+            TransitAlt_Time_Hours_Local = TwentyFourHourConversion(TransitAlt_Time_Hours_Local);
 
             double TransitAlt_Time_Hours_Local_Floored = Math.Floor(TransitAlt_Time_Hours_Local);
             double TransitAlt_Time_Minutes_Local = (TransitAlt_Time_Hours_Local - TransitAlt_Time_Hours_Local_Floored) * 60;
@@ -199,37 +172,13 @@ namespace Testing
             double Time_LST_Minutes = (Time_LST_Hours - Math.Floor(Time_LST_Hours)) * 60;
 
             double Time_Hours_GMST = Time_LST_Hours + (longitude / 15);
-
-            if (Time_Hours_GMST < 0)
-            {
-                Time_Hours_GMST += 24;
-            }
-            if (Time_Hours_GMST >= 24)
-            {
-                Time_Hours_GMST -= 24;
-            }
+            Time_Hours_GMST = TwentyFourHourConversion(Time_Hours_GMST);
 
             double Time_Hours_UT = (Time_Hours_GMST - 6.656306 - (0.0657098242 * (N))) / 1.0027379093;
-
-            if (Time_Hours_UT < 0)
-            {
-                Time_Hours_UT += 24;
-            }
-            if (Time_Hours_UT >= 24)
-            {
-                Time_Hours_UT -= 24;
-            }
+            Time_Hours_UT = TwentyFourHourConversion(Time_Hours_UT);
 
             double Time_Hours_Local = Time_Hours_UT + UT_offset;
-
-            if (Time_Hours_Local < 0)
-            {
-                Time_Hours_Local += 24;
-            }
-            if (Time_Hours_Local >= 24)
-            {
-                Time_Hours_Local -= 24;
-            }
+            Time_Hours_Local = TwentyFourHourConversion(Time_Hours_Local);
 
             double Time_Hours_Local_Floored = Math.Floor(Time_Hours_Local);
             double Time_Minutes_Local = (Time_Hours_Local - Time_Hours_Local_Floored) * 60;
@@ -270,6 +219,21 @@ namespace Testing
             }
 
             return Full_Local_Time;
+
+        }
+
+        static double TwentyFourHourConversion(double Hours)
+        {
+            if (Hours < 0)
+            {
+                Hours += 24;
+            }
+            if (Hours >= 24)
+            {
+                Hours -= 24;
+            }
+
+            return Hours;
         }
     }
 }
